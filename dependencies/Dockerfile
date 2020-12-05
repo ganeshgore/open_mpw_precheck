@@ -68,4 +68,16 @@ RUN date +"Build Timestamp: %Y-%m-%d_%H-%M-%S" > /build/version/magic.version
 RUN git rev-parse HEAD >> /build/version/magic.version
 RUN tar -czf /build.tar.gz /build
 
+WORKDIR /usr/local/pdk_root/
+
+COPY Makefile .
+
+ENV RUN_ROOT=/usr/local/pdk_root/
+ENV PDK_ROOT=/usr/local/pdk_root/
+
+RUN make skywater-pdk
+RUN make skywater-library
+RUN make open_pdks
+RUN make build-pdk
+
 WORKDIR $PRECHECKER_ROOT
