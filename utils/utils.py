@@ -54,14 +54,15 @@ class logging_controller:
         print("Full log could be found at "+ str(self.log),flush=True)
 
 
-    def exit_control(self,code):
+    def exit_control(self,code,skip_final_compress):
         self.dump_full_log()
-        print("{{PROGRESS}} Compressing the gds files")
-        # Compress project items.
-        run_prep_cmd = "cd {target_path}; make compress;".format(
-            target_path=self.target_path
-        )
+        if not skip_final_compress:
+            print("{{PROGRESS}} Compressing the gds files")
+            # Compress project items.
+            run_prep_cmd = "cd {target_path}; make compress;".format(
+                target_path=self.target_path
+            )
 
-        process = subprocess.Popen(run_prep_cmd, stdout=subprocess.PIPE, shell=True)
-        process.communicate()[0].strip()
+            process = subprocess.Popen(run_prep_cmd, stdout=subprocess.PIPE, shell=True)
+            process.communicate()[0].strip()
         exit(code)

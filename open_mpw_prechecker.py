@@ -38,11 +38,11 @@ def parse_netlists(target_path, top_level_netlist, user_level_netlist, lc=loggin
     else:
         lc.print_control(
             "{{FAIL}} the provided top level and user level netlists are neither a .spice or a .v files. Please adhere to the required input type.")
-        lc.exit_control(2)
+        lc.exit_control(2, skip_final_compress)
     return verilog_netlist, spice_netlist
 
 
-def run_check_sequence(target_path, pdk_root, output_directory=None, waive_fuzzy_checks=False, skip_drc=False, drc_only=False):
+def run_check_sequence(target_path, pdk_root, output_directory=None, waive_fuzzy_checks=False, skip_drc=False, drc_only=False, skip_final_compress=False):
     if output_directory is None:
         output_directory = str(target_path) + '/checks'
     # Create the logging controller
@@ -73,7 +73,7 @@ def run_check_sequence(target_path, pdk_root, output_directory=None, waive_fuzzy
             if not lcr["approved"]:
                 lc.print_control("{{LICENSE COMPLIANCE FAILED}} A prohibited LICENSE (%s) was found in project root." % lcr["license_key"])
                 lc.print_control("TEST FAILED AT STEP %s" % str(stp_cnt))
-                lc.exit_control(2)
+                lc.exit_control(2, skip_final_compress)
             elif lcr["approved"]:
                 if lcr["license_key"]:
                     lc.print_control("{{LICENSE COMPLIANCE PASSED}} %s LICENSE file was found in project root" % lcr["license_key"])
@@ -82,7 +82,7 @@ def run_check_sequence(target_path, pdk_root, output_directory=None, waive_fuzzy
         else:
             lc.print_control("{{LICENSE COMPLIANCE FAILED}} A LICENSE file was not found in project root.")
             lc.print_control("TEST FAILED AT STEP %s" % str(stp_cnt))
-            lc.exit_control(2)
+            lc.exit_control(2, skip_final_compress)
 
         third_party_licenses = check_license.check_lib_license(target_path + '/third-party/')
 
@@ -90,7 +90,7 @@ def run_check_sequence(target_path, pdk_root, output_directory=None, waive_fuzzy
             for key in third_party_licenses:
                 if not third_party_licenses[key]:
                     lc.print_control("{{FAIL}} Third Party" + str(key) + "License Not Found\nTEST FAILED AT STEP " + str(stp_cnt))
-                    lc.exit_control(2)
+                    lc.exit_control(2, skip_final_compress)
             lc.print_control("{{PROGRESS}} Third Party Licenses Found.\nStep " + str(stp_cnt) + " done without fatal errors.")
         else:
             lc.print_control("{{PROGRESS}} No third party libraries found.\nStep " + str(stp_cnt) + " done without fatal errors.")
@@ -122,7 +122,7 @@ def run_check_sequence(target_path, pdk_root, output_directory=None, waive_fuzzy
             lc.print_control(
                 "{{FAIL}} YAML file not valid in target path, please check the README.md for more info on the structure\nTEST FAILED AT STEP " + str(
                     stp_cnt))
-            lc.exit_control(2)
+            lc.exit_control(2, skip_final_compress)
         stp_cnt += 1
 
         verilog_netlist, spice_netlist = parse_netlists(target_path, top_level_netlist, user_level_netlist, lc)
@@ -151,7 +151,7 @@ def run_check_sequence(target_path, pdk_root, output_directory=None, waive_fuzzy
             lc.print_control("{{PROGRESS}} DRC Checks on MAG Passed!\nStep " + str(stp_cnt) + " done without fatal errors.")
         else:
             lc.print_control("{{FAIL}} DRC Checks on MAG Failed, Reason: " + reason + "\nTEST FAILED AT STEP " + str(stp_cnt))
-            lc.exit_control(2)
+            lc.exit_control(2, skip_final_compress)
     stp_cnt += 1
 
     # NOTE: Step 6: Not Yet Implemented.
@@ -182,11 +182,15 @@ if __name__ == "__main__":
     parser.add_argument('--drc_only', '-do', action='store_true', default=False,
                         help="Specifies whether or not to only run DRC checks.")
 
+    parser.add_argument('--skip_final_compress', '-sc', action='store_true', default=False,
+                        help="Skips compressing gds files before exit")
+
     args = parser.parse_args()
     target_path = args.target_path
     pdk_root = args.pdk_root
     skip_drc = args.skip_drc
     waive_fuzzy_checks = args.waive_fuzzy_checks
     drc_only = args.drc_only
+    skip_final_compress = args.skip_final_compress
 
-    run_check_sequence(target_path, pdk_root, args.output_directory, waive_fuzzy_checks, skip_drc, drc_only)
+    run_check_sequence(target_path, pdk_root, args.output_directory, waive_fuzzy_checks, skip_drc, drc_only, skip_final_compress)
