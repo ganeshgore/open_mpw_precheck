@@ -13,7 +13,7 @@ To setup the necessary docker file, run:
 ```
 
 If you don't have the skywater-pdk installed, run:
-```bash 
+```bash
     export PDK_ROOT=<absolute path to where skywater-pdk and open_pdks will reside>
     cd dependencies
     sh build-pdk.sh
@@ -87,7 +87,7 @@ python3 open_mpw_prechecker.py [-h] --target_path TARGET_PATH
                                 --pdk_root PDK_ROOT
                                 [--output_directory OUTPUT_DIRECTORY]
                                 [--waive_fuzzy_checks] [--skip_drc]
-                                [--drc_only]
+                                [--drc_only] [--skip_final_compress]
 
 Runs the precheck tool by calling the various checks in order.
 
@@ -103,5 +103,6 @@ optional arguments:
                         checks.
   --skip_drc, -sd       Specifies whether or not to skip DRC checks.
   --drc_only, -do       Specifies whether or not to only run DRC checks.
-
+  --skip_final_compress, -sc
+                        Skips compressing gds files before exit
 ```
