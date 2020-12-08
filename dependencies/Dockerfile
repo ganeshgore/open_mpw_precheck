@@ -25,7 +25,7 @@ RUN yum install -y python36u python36u-libs python36u-devel python36u-pip python
 RUN alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 60
 
 RUN pip3.6 install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir \ 
+    pip install --no-cache-dir \
                 pyyaml \
                 awscli \
                 requests \
@@ -79,5 +79,7 @@ RUN make skywater-pdk
 RUN make skywater-library
 RUN make open_pdks
 RUN make build-pdk
+
+RUN yum -y install https://www.klayout.org/downloads/CentOS_7/klayout-0.26.9-0.x86_64.rpm
 
 WORKDIR $PRECHECKER_ROOT
