@@ -1,4 +1,4 @@
-# Copyright 2020 Efabless Corporation
+# SPDX-FileCopyrightText: 2020 Efabless Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 
 load $::env(DESIGN_NAME) -dereference
 
@@ -20,6 +21,9 @@ set cell_name $::env(DESIGN_NAME)
 magic::suspendall
 puts stdout "\[INFO\]: Loading $cell_name\n"
 flush stdout
+load ../maglef/sram_1rw1r_32_256_8_sky130.mag
+gds noduplicates true
+gds read ../gds/user_project_wrapper.gds
 load $cell_name
 select top cell
 expand

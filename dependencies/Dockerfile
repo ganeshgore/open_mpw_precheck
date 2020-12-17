@@ -1,4 +1,4 @@
-# Copyright 2020 Efabless Corporation
+# SPDX-FileCopyrightText: 2020 Efabless Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 
 # syntax = docker/dockerfile:1.0-experimental
 FROM centos:centos7 as build
@@ -42,11 +43,11 @@ RUN yum install -y tcllib git tcl tk libjpeg libgomp libXext libSM libXft libffi
 
 RUN yum install gcc-c++ -y
 
-RUN git clone git://opencircuitdesign.com/magic magic_23112020
+RUN git clone git://opencircuitdesign.com/magic magic_07122020
 
-WORKDIR magic_23112020
+WORKDIR magic_07122020
 
-RUN git checkout 0ad9ac91e35c6e7b29b9bdc78e1a97ad0cb8bd8d
+RUN git checkout a78b45930344e3b627a766b35cda5319ebe2ab29
 
 # build
 RUN ./configure --prefix=/build && \

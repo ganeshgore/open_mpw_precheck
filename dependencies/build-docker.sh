@@ -1,4 +1,4 @@
-# Copyright 2020 Efabless Corporation
+# SPDX-FileCopyrightText: 2020 Efabless Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,8 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 
 mkdir -p logs/docker
 echo "dir created"
-docker build --rm -t open_mpw_prechecker . | tee logs/docker/open_mpw_prechecker.build.txt
+docker build --rm -t efabless/open_mpw_precheck:latest . | tee logs/docker/open_mpw_prechecker.build.txt
 

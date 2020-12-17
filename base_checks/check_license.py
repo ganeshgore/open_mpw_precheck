@@ -1,4 +1,4 @@
-# Copyright 2020 Efabless Corporation
+# SPDX-FileCopyrightText: 2020 Efabless Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 
 import os
 from pathlib import Path
@@ -29,10 +30,12 @@ _spdx_license_header = 'SPDX-License-Identifier'
 IGNORED_DIRS = ['third_party', '.git']
 
 # Files ignored for license check
-IGNORED_FILES = ['LICENSE']
+IGNORED_FILES = ['LICENSE', 'manifest', '.gitignore', 'info.yaml']
 
 # File extensions to be ignored for license check
-IGNORED_EXTS = ['.def', '.gds', '.lef', '.mag', '.cfg', '.csv']
+IGNORED_EXTS = ['.cfg', '.csv', '.def', '.gds', '.lef', '.mag',
+                '.pdf', '.png', '.pyc', '.log', '.drc', '.rdb',
+                '.out', '.hex']
 
 
 def check_license(user_license_path, licenses_path):
@@ -125,9 +128,8 @@ def check_file_spdx_compliance(file_path, license_key):
         f.close()
 
         if lines and list(filter(None, lines)):
-            header_char = list(filter(None, lines))[0][0]
             for line in lines:
-                if line and line[0] == header_char:
+                if line:
                     if _spdx_copyright_header in line:
                         spdx_cp_compliant = True
                     if _spdx_license_header in line:

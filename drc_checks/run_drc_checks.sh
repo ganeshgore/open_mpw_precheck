@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2020 Efabless Corporation
+# SPDX-FileCopyrightText: 2020 Efabless Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,8 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 
-# To call: ./run_drc_checks.sh <target_path> <design_name> <output_path>
+# To call: ./run_drc_checks.sh <target_path> <design_name> <pdk_root> <output_path>
 
 export TARGET_DIR=$1
 export DESIGN_NAME=$2
@@ -49,14 +50,15 @@ if [ $Test_Magic_violations -ne -1 ]; then Test_Magic_violations=$(((Test_Magic_
 echo "Test # of DRC Violations:"
 echo $Test_Magic_violations
 
-if [ 0 -ne $Test_Magic_violations ]; then echo "DRC Check FAILED"; exit -1; fi
-
 if [ 0 -ne $Test_Magic_violations ]; then
+    echo "[Info] Converting errors to RDB format..."
     python3 $SCRIPTS_ROOT/magic_drc_to_rdb.py \
-        -magic_drc_in $OUT_DIR/$DESIGN_NAME.magic.drc \
-        -rdb_out $OUT_DIR/$DESIGN_NAME.magic.rdb
+        --magic_drc_in $OUT_DIR/$DESIGN_NAME.magic.drc \
+        --rdb_out $OUT_DIR/$DESIGN_NAME.magic.rdb
+    echo "[Info] Converted errors in RDB format"
 fi
-echo "[Info] Converted errors in RDB format"
+
+if [ 0 -ne $Test_Magic_violations ]; then echo "DRC Check FAILED"; exit -1; fi
 
 echo "DRC Check Passed"
 exit 0

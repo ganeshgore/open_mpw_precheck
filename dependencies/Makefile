@@ -1,4 +1,4 @@
-# Copyright 2020 Efabless Corporation
+# SPDX-FileCopyrightText: 2020 Efabless Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 
 THREADS ?= $(shell nproc)
 STD_CELL_LIBRARY ?= sky130_fd_sc_hd
@@ -18,7 +19,7 @@ SPECIAL_VOLTAGE_LIBRARY ?= sky130_fd_sc_hvl
 IO_LIBRARY ?= sky130_fd_io
 
 SKYWATER_COMMIT ?= 3d7617a1acb92ea883539bcf22a632d6361a5de4
-OPEN_PDKS_COMMIT ?= b184e85de7629b8c87087a46b79eb45e7f7cd383
+OPEN_PDKS_COMMIT ?= 32cdb2097fd9a629c91e8ea33e1f6de08ab25946
 
 ifndef PDK_ROOT
 $(error PDK_ROOT is undefined, please export it before running make)
@@ -35,6 +36,7 @@ $(PDK_ROOT)/skywater-pdk:
 .PHONY: skywater-pdk
 skywater-pdk: $(PDK_ROOT)/skywater-pdk
 	cd $(PDK_ROOT)/skywater-pdk && \
+		git checkout master && git pull && \
 		git checkout -qf $(SKYWATER_COMMIT)
 
 .PHONY: skywater-library
@@ -64,6 +66,7 @@ $(PDK_ROOT)/open_pdks:
 .PHONY: open_pdks
 open_pdks: $(PDK_ROOT)/open_pdks
 	cd $(PDK_ROOT)/open_pdks && \
+		git checkout master && git pull && \
 		git checkout -qf $(OPEN_PDKS_COMMIT)
 
 .PHONY: build-pdk

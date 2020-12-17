@@ -1,4 +1,4 @@
-# Copyright 2020 Efabless Corporation
+# SPDX-FileCopyrightText: 2020 Efabless Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 
 import re
 
@@ -115,7 +116,7 @@ def extract_connections_from_inst(verilog_netlist, toplevel,user_module):
             module = verilogContent[start_idx:end_idx]
             pattern = re.compile(r'\s*\b%s\s*\S+\s*\#?\(' % user_module)
             instances = re.findall(pattern, module)
-            if len(instances) == 1:
+            if len(instances) >= 1:
                 start_idx = module.find(instances[0])
                 end_idx = module.find(');',start_idx)
                 inst = module[start_idx+len(instances[0]):end_idx]

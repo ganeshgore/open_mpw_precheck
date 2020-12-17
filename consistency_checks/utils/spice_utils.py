@@ -1,4 +1,4 @@
-# Copyright 2020 Efabless Corporation
+# SPDX-FileCopyrightText: 2020 Efabless Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 
 import re
 
@@ -43,7 +44,7 @@ def confirm_complex_subckt(spice_netlist,subckt_name,minimum_devices_number):
             subckt = spiceContent[start_idx:end_idx]
             pattern2 = re.compile(r'\nX[\S+]+\s*')
             instances = re.findall(pattern2, subckt)
-            if len(instances) > minimum_devices_number:
+            if len(instances) >= minimum_devices_number:
                 return True, 'Design is complex and contains: '+str(len(instances))+' subckts'
             else:
                 return False, "The subckt "+subckt_name + " doesn't contain the minimum number of devices required"
